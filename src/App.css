@@ -1,13 +1,11 @@
-.square.white {
+.tile.white {
   background-color: white;
 }
 
-.square.black {
-  background-color: black;
+.tile.black {
+  background-color: gray;
 }
-.square{
-  color: grey;
-}
+
 
 #chessboard {
   display: grid;
@@ -17,9 +15,15 @@
   height: 800px;
   width: 800px;
 }
-#chessboard .square {
+#chessboard .tile {
   width: 100px;
   height: 100px;
+  display: grid;
+  place-content: center;
+}
+
+#chessboard .tile img {
+  width: 80px;
 }
 
 #app {
