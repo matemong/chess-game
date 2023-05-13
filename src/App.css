@@ -22,8 +22,16 @@
   place-content: center;
 }
 
-#chessboard .tile img {
-  width: 80px;
+#chessboard .tile .chess-piece {
+  width: 100px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80px;
+  cursor: grab;
+}
+#chessboard .tile .chess-piece:active {
+  cursor: grabbing;
 }
 
 #app {

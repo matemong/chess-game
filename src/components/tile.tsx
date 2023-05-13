@@ -1,13 +1,30 @@
 interface Props {
-    number: number
-    image?: string
+  number: number;
+  image?: string;
 }
 
-export default function Tile({number, image}: Props) {
-    if (number % 2 === 0) {
-        return <div className="tile black"><img src={image}></img></div>
-    } else{
-        return <div className="tile white"><img src={image}></img></div>
-    }
-    
+export default function Tile({ number, image }: Props) {
+  if (number % 2 === 0) {
+    return (
+      <div className="tile black">
+        {image && (
+          <div
+            className="chess-piece"
+            style={{ backgroundImage: `url(${image})` }}
+          ></div>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div className="tile white">
+        {image && (
+          <div
+            className="chess-piece"
+            style={{ backgroundImage: `url(${image})` }}
+          ></div>
+        )}
+      </div>
+    );
+  }
 }
