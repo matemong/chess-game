@@ -1,9 +1,9 @@
 .tile.white {
-  background-color: white;
+  background-color: rgb(243, 184, 141);
 }
 
 .tile.black {
-  background-color: gray;
+  background-color: rgb(109, 51, 51);
 }
 
 

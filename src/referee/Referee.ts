@@ -31,9 +31,24 @@ export default class Referee {
             return true;
           }
         }
+      } else {
+        if (previouyY === 6) {
+          if (
+            previousX === currentX &&
+            (currentY - previouyY === -1 || currentY - previouyY === -2)
+          ) {
+            console.log("valid");
+            return true;
+          }
+        } else {
+          if (previousX === currentX && currentY - previouyY === -1) {
+            console.log("valid");
+            return true;
+          }
+        }
       }
-
-      return false;
     }
+
+    return false;
   }
 }
