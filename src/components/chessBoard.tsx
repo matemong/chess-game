@@ -12,6 +12,7 @@ import BlackQueenImage from "../assets/img/queen_b.png";
 import WhiteRookImage from "../assets/img/rook_w.png";
 import BlackRookImage from "../assets/img/rook_b.png";
 import { useRef, useState, useEffect } from "react";
+import Referee from "../referee/Referee";
 
 const rows = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const columns = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -20,6 +21,22 @@ interface Piece {
   image: string;
   x: number;
   y: number;
+  type: PieceType;
+  team: TeamType;
+}
+
+export enum PieceType {
+  PAWN,
+  BISHOP,
+  KNIGHT,
+  ROOK,
+  QUEEN,
+  KING,
+}
+
+export enum TeamType {
+  BLACK,
+  WHITE,
 }
 
 export default function Chessboard() {
@@ -31,43 +48,237 @@ export default function Chessboard() {
 
   const chessboardRef = useRef<HTMLDivElement>(null);
 
+  const referee = new Referee();
+
   useEffect(() => {
     setPieces([
-      { image: WhiteRookImage, x: 0, y: 0 },
-      { image: WhiteKnightImage, x: 1, y: 0 },
-      { image: WhiteBishopImage, x: 2, y: 0 },
-      { image: WhiteQueenImage, x: 3, y: 0 },
-      { image: WhiteKingImage, x: 4, y: 0 },
-      { image: WhiteBishopImage, x: 5, y: 0 },
-      { image: WhiteKnightImage, x: 6, y: 0 },
-      { image: WhiteRookImage, x: 7, y: 0 },
+      {
+        image: WhiteRookImage,
+        x: 0,
+        y: 0,
+        type: PieceType.ROOK,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteKnightImage,
+        x: 1,
+        y: 0,
+        type: PieceType.KNIGHT,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteBishopImage,
+        x: 2,
+        y: 0,
+        type: PieceType.BISHOP,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteQueenImage,
+        x: 3,
+        y: 0,
+        type: PieceType.QUEEN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteKingImage,
+        x: 4,
+        y: 0,
+        type: PieceType.KING,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteBishopImage,
+        x: 5,
+        y: 0,
+        type: PieceType.BISHOP,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteKnightImage,
+        x: 6,
+        y: 0,
+        type: PieceType.KNIGHT,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhiteRookImage,
+        x: 7,
+        y: 0,
+        type: PieceType.ROOK,
+        team: TeamType.WHITE,
+      },
 
-      { image: WhitePawnImage, x: 0, y: 1 },
-      { image: WhitePawnImage, x: 1, y: 1 },
-      { image: WhitePawnImage, x: 2, y: 1 },
-      { image: WhitePawnImage, x: 3, y: 1 },
-      { image: WhitePawnImage, x: 4, y: 1 },
-      { image: WhitePawnImage, x: 5, y: 1 },
-      { image: WhitePawnImage, x: 6, y: 1 },
-      { image: WhitePawnImage, x: 7, y: 1 },
+      {
+        image: WhitePawnImage,
+        x: 0,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 1,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 2,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 3,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 4,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 5,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 6,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
+      {
+        image: WhitePawnImage,
+        x: 7,
+        y: 1,
+        type: PieceType.PAWN,
+        team: TeamType.WHITE,
+      },
 
-      { image: BlackPawnImage, x: 0, y: 6 },
-      { image: BlackPawnImage, x: 1, y: 6 },
-      { image: BlackPawnImage, x: 2, y: 6 },
-      { image: BlackPawnImage, x: 3, y: 6 },
-      { image: BlackPawnImage, x: 4, y: 6 },
-      { image: BlackPawnImage, x: 5, y: 6 },
-      { image: BlackPawnImage, x: 6, y: 6 },
-      { image: BlackPawnImage, x: 7, y: 6 },
+      {
+        image: BlackPawnImage,
+        x: 0,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 1,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 2,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 3,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 4,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 5,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 6,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackPawnImage,
+        x: 7,
+        y: 6,
+        type: PieceType.PAWN,
+        team: TeamType.BLACK,
+      },
 
-      { image: BlackRookImage, x: 0, y: 7 },
-      { image: BlackKnightImage, x: 1, y: 7 },
-      { image: BlackBishopImage, x: 2, y: 7 },
-      { image: BlackQueenImage, x: 3, y: 7 },
-      { image: BlackKingImage, x: 4, y: 7 },
-      { image: BlackBishopImage, x: 5, y: 7 },
-      { image: BlackKnightImage, x: 6, y: 7 },
-      { image: BlackRookImage, x: 7, y: 7 },
+      {
+        image: BlackRookImage,
+        x: 0,
+        y: 7,
+        type: PieceType.ROOK,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackKnightImage,
+        x: 1,
+        y: 7,
+        type: PieceType.KNIGHT,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackBishopImage,
+        x: 2,
+        y: 7,
+        type: PieceType.BISHOP,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackQueenImage,
+        x: 3,
+        y: 7,
+        type: PieceType.QUEEN,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackKingImage,
+        x: 4,
+        y: 7,
+        type: PieceType.KING,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackBishopImage,
+        x: 5,
+        y: 7,
+        type: PieceType.BISHOP,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackKnightImage,
+        x: 6,
+        y: 7,
+        type: PieceType.KNIGHT,
+        team: TeamType.BLACK,
+      },
+      {
+        image: BlackRookImage,
+        x: 7,
+        y: 7,
+        type: PieceType.ROOK,
+        team: TeamType.BLACK,
+      },
     ]);
   }, []);
 
@@ -130,8 +341,14 @@ export default function Chessboard() {
       setPieces((value) => {
         const pieces = value.map((p) => {
           if (p.x === gridX && p.y === gridY) {
-            p.x = x;
-            p.y = y;
+            if (referee.isValidMove(gridX, gridY, x, y, p.type, p.team)) {
+              p.x = x;
+              p.y = y;
+            } else {
+              activePiece.style.position = "relative";
+              activePiece.style.removeProperty("top");
+              activePiece.style.removeProperty("left");
+            }
           }
           return p;
         });
