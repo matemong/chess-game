@@ -27,6 +27,30 @@ export default class Referee {
       return false;
     }
   }
+  isEnPassantMove(
+    px: number,
+    py: number,
+    x: number,
+    y: number,
+    type: PieceType,
+    team: TeamType,
+    boardState: Piece[]
+  ) {
+    const pawnDirection = team === TeamType.WHITE ? 1 : -1;
+
+    if (type === PieceType.PAWN) {
+      if ((x - px === -1 || x - px === 1) && y - py === pawnDirection) {
+        const piece = boardState.find(
+          (p) => p.x === x && p.y === y - pawnDirection && p.enPassant
+        );
+        if (piece) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
 
   isValidMove(
     previousX: number,
