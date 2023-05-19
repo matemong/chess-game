@@ -11,6 +11,22 @@ export default class Referee {
     }
     return false;
   }
+  isTileOccupiedByOpponent(
+    x: number,
+    y: number,
+    boardState: Piece[],
+    team: TeamType
+  ): boolean {
+    const piece = boardState.find(
+      (p) => p.x === x && p.y === y && p.team !== team
+    );
+
+    if (piece) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   isValidMove(
     previousX: number,
@@ -47,6 +63,24 @@ export default class Referee {
         currentY - previousY === pawnDirection
       ) {
         if (!this.isTileOccupied(currentX, currentY, boardState)) {
+          return true;
+        }
+      } else if (
+        currentX - previousX === -1 &&
+        currentY - previousY === pawnDirection
+      ) {
+        if (
+          this.isTileOccupiedByOpponent(currentX, currentY, boardState, team)
+        ) {
+          return true;
+        }
+      } else if (
+        currentX - previousX === 1 &&
+        currentY - previousY === pawnDirection
+      ) {
+        if (
+          this.isTileOccupiedByOpponent(currentX, currentY, boardState, team)
+        ) {
           return true;
         }
       }
