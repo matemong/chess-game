@@ -7,6 +7,7 @@ import {
 import {
   isTileEmptyOrOccupiedByOpponent,
   isTileOccupied,
+  isTileOccupiedByOpponent,
 } from "./GeneralRules";
 
 export const rookMove = (
@@ -55,4 +56,77 @@ export const rookMove = (
     }
   }
   return false;
+};
+
+export const getPossibleRookMoves = (
+  rook: Piece,
+  boardstate: Piece[]
+): Position[] => {
+  const possibleMoves: Position[] = [];
+
+  for (let i = 1; i < 8; i++) {
+    const destination: Position = {
+      x: rook.position.x,
+      y: rook.position.y + i,
+    };
+
+    if (!isTileOccupied(destination, boardstate)) {
+      possibleMoves.push(destination);
+    } else if (isTileOccupiedByOpponent(destination, boardstate, rook.team)) {
+      possibleMoves.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+
+  for (let i = 1; i < 8; i++) {
+    const destination: Position = {
+      x: rook.position.x,
+      y: rook.position.y - i,
+    };
+
+    if (!isTileOccupied(destination, boardstate)) {
+      possibleMoves.push(destination);
+    } else if (isTileOccupiedByOpponent(destination, boardstate, rook.team)) {
+      possibleMoves.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+
+  for (let i = 1; i < 8; i++) {
+    const destination: Position = {
+      x: rook.position.x - i,
+      y: rook.position.y,
+    };
+
+    if (!isTileOccupied(destination, boardstate)) {
+      possibleMoves.push(destination);
+    } else if (isTileOccupiedByOpponent(destination, boardstate, rook.team)) {
+      possibleMoves.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+
+  for (let i = 1; i < 8; i++) {
+    const destination: Position = {
+      x: rook.position.x + i,
+      y: rook.position.y,
+    };
+
+    if (!isTileOccupied(destination, boardstate)) {
+      possibleMoves.push(destination);
+    } else if (isTileOccupiedByOpponent(destination, boardstate, rook.team)) {
+      possibleMoves.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+
+  return possibleMoves;
 };

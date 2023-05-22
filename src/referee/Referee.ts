@@ -7,7 +7,12 @@ import {
   rookMove,
   queenMove,
   kingMove,
-  GetPossiblePawnMoves,
+  getPossiblePawnMoves,
+  getPossibleKnightMoves,
+  getPossibleBishopMoves,
+  getPossibleRookMoves,
+  getPossibleQueenMoves,
+  getPossibleKingMoves
 } from "./rules";
 
 export default class Referee {
@@ -105,7 +110,17 @@ export default class Referee {
     switch(piece.type)
     {
       case PieceType.PAWN:
-        return GetPossiblePawnMoves(piece, boardState);
+        return getPossiblePawnMoves(piece, boardState);
+      case PieceType.KNIGHT:
+        return getPossibleKnightMoves(piece, boardState);
+      case PieceType.BISHOP:
+        return getPossibleBishopMoves(piece, boardState);
+      case PieceType.ROOK:
+        return getPossibleRookMoves(piece, boardState);
+      case PieceType.QUEEN:
+        return getPossibleQueenMoves(piece, boardState);
+      case PieceType.KING:
+        return getPossibleKingMoves(piece, boardState);
       default:
         return [];
     }
