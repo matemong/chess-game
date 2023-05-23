@@ -1,9 +1,4 @@
-import {
-  Piece,
-  TeamType,
-  samePosition,
-  Position,
-} from "../../components/Constants";
+import { Piece, TeamType, samePosition, Position } from "../../Constants";
 import {
   isTileEmptyOrOccupiedByOpponent,
   isTileOccupied,

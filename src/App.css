@@ -1,86 +1,9 @@
-.tile.white {
-  background-color: rgb(243, 184, 141);
-}
-
-.tile.black {
-  background-color: rgb(109, 51, 51);
-}
-
-
-#chessboard {
-  display: grid;
-  grid-template-columns: repeat(8, 100px);
-  grid-template-rows: repeat(8, 100px);
-  background-color: blueviolet;
-  height: 800px;
-  width: 800px;
-}
-#chessboard .tile {
-  width: 100px;
-  height: 100px;
-  display: grid;
-  place-content: center;
-}
-
-#chessboard .tile .chess-piece {
-  width: 100px;
-  height: 100px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 80px;
-  cursor: grab;
-}
-#chessboard .tile .chess-piece:active {
-  cursor: grabbing;
-}
-
 #app {
-  height: 100vh;
   display: grid;
   place-content: center;
+  height: 100vh;
+  background-color: #202020;
 }
-#root{
+#root {
   width: 100%;
 }
-
-#pawn-promotion-modal {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-}
-
-#pawn-promotion-modal.hidden {
-  display: none;
-}
-
-#pawn-promotion-modal > .modal-body {
-  position: absolute;
-  top: calc(50% - 150px);
-  left: calc(50% - 400px);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 300px;
-  width: 800px;
-  background-color: rgba(127, 127, 127, 0.8);
-}
-
-#pawn-promotion-modal > .modal-body > img {
-  height: 120px;
-  padding: 20px;
-  border-radius: 50%;
-}
-
-#pawn-promotion-modal > .modal-body > img:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-}
-.tile-highlight::before {
-  content: " ";
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.4);
-} 

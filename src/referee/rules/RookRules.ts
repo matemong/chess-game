@@ -3,7 +3,7 @@ import {
   Position,
   samePosition,
   TeamType,
-} from "../../components/Constants";
+} from "../../Constants";
 import {
   isTileEmptyOrOccupiedByOpponent,
   isTileOccupied,
