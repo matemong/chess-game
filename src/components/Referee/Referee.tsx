@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   initialBoardState,
   Piece,
@@ -28,18 +28,18 @@ export default function Referee() {
   const [promotionPawn, setPromotionPawn] = useState<Piece>();
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    updatePossibleMoves();
-  }, []);
-
-  function updatePossibleMoves() {
+  const updatePossibleMoves = useCallback(() => {
     setPieces((currentPieces) => {
       return currentPieces.map((p) => {
         p.possibleMoves = getValidMoves(p, currentPieces);
         return p;
       });
     });
-  }
+  }, []);
+  
+  useEffect(() => {
+    updatePossibleMoves();
+  }, [updatePossibleMoves]);
 
   function playMove(playedPiece: Piece, destination: Position): boolean {
     const validMove = isValidMove(
