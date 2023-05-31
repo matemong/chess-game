@@ -1,4 +1,4 @@
-import { samePosition, TeamType } from "../../Constants";
+import { TeamType } from "../../Types";
 import { Piece, Position } from "../../models";
 import {
   isTileEmptyOrOccupiedByOpponent,
@@ -21,7 +21,7 @@ export const bishopMove = (
         initialPosition.x + i,
         initialPosition.y + i
       );
-      if (samePosition(passedPosition, desiredPosition)) {
+      if (passedPosition.samePosition(desiredPosition)) {
         if (isTileEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
           return true;
         }
@@ -40,7 +40,7 @@ export const bishopMove = (
         initialPosition.x + i,
         initialPosition.y - i
       );
-      if (samePosition(passedPosition, desiredPosition)) {
+      if (passedPosition.samePosition(desiredPosition)) {
         if (isTileEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
           return true;
         }
@@ -59,7 +59,7 @@ export const bishopMove = (
         initialPosition.x - i,
         initialPosition.y - i
       );
-      if (samePosition(passedPosition, desiredPosition)) {
+      if (passedPosition.samePosition(desiredPosition)) {
         if (isTileEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
           return true;
         }
@@ -78,7 +78,7 @@ export const bishopMove = (
         initialPosition.x - i,
         initialPosition.y + i
       );
-      if (samePosition(passedPosition, desiredPosition)) {
+      if (passedPosition.samePosition(desiredPosition)) {
         if (isTileEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
           return true;
         }
