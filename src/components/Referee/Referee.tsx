@@ -25,16 +25,18 @@ export default function Referee() {
   const [promotionPawn, setPromotionPawn] = useState<Piece>();
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const updatePossibleMoves = useCallback(() => {
-    board.calculateAllMoves();
-  }, [board]);
-
   useEffect(() => {
-    updatePossibleMoves();
-  }, [updatePossibleMoves]);
+    board.calculateAllMoves();
+  }, []);
 
   function playMove(playedPiece: Piece, destination: Position): boolean {
     if (playedPiece.possibleMoves === undefined) return false;
+
+    if (playedPiece.team === TeamType.WHITE && board.totalTurns % 2 !== 1)
+      return false;
+    if (playedPiece.team === TeamType.BLACK && board.totalTurns % 2 !== 0)
+      return false;
+
     let playedMoveIsValid = false;
 
     const validMove = playedPiece.possibleMoves?.some((m) =>
@@ -51,14 +53,16 @@ export default function Referee() {
     );
 
     setBoard((previousBoard) => {
-      playedMoveIsValid = board.playMove(
+      const clonedBoard = board.clone();
+      clonedBoard.totalTurns += 1;
+      playedMoveIsValid = clonedBoard.playMove(
         enPassantMove,
         validMove,
         playedPiece,
         destination
       );
 
-      return board.clone();
+      return clonedBoard;
     });
 
     const promotionRow = playedPiece.team === TeamType.WHITE ? 7 : 0;
@@ -71,6 +75,7 @@ export default function Referee() {
         return clonedPlayedPiece;
       });
     }
+
     return playedMoveIsValid;
   }
 
@@ -95,6 +100,7 @@ export default function Referee() {
             p.isPawn &&
             (p as Pawn).enPassant
         );
+        console.log(piece);
         if (piece) {
           return true;
         }
@@ -183,8 +189,10 @@ export default function Referee() {
       }, [] as Piece[]);
 
       clonedBoard.calculateAllMoves();
+
       return clonedBoard;
     });
+
     modalRef.current?.classList.add("hidden");
   }
 
@@ -194,6 +202,7 @@ export default function Referee() {
 
   return (
     <>
+      <p style={{ color: "white", fontSize: "24px" }}>{board.totalTurns}</p>
       <div id="pawn-promotion-modal" className="hidden" ref={modalRef}>
         <div className="modal-body">
           <img
@@ -210,7 +219,7 @@ export default function Referee() {
           />
           <img
             onClick={() => promotePawn(PieceType.QUEEN)}
-            src={`/src/assets/img/queen_${promotionTeamType()}.png`}
+            src={`s/rc/assets/img/queen_${promotionTeamType()}.png`}
           />
         </div>
       </div>
