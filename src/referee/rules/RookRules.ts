@@ -1,9 +1,5 @@
-import {
-  Piece,
-  Position,
-  samePosition,
-  TeamType,
-} from "../../Constants";
+import { samePosition, TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import {
   isTileEmptyOrOccupiedByOpponent,
   isTileOccupied,
@@ -20,10 +16,10 @@ export const rookMove = (
     for (let i = 1; i < 8; i++) {
       const multiplier = desiredPosition.y < initialPosition.y ? -1 : 1;
 
-      const passedPosition: Position = {
-        x: initialPosition.x,
-        y: initialPosition.y + i * multiplier,
-      };
+      const passedPosition = new Position(
+        initialPosition.x,
+        initialPosition.y + i * multiplier
+      );
       if (samePosition(passedPosition, desiredPosition)) {
         if (isTileEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
           return true;
@@ -40,10 +36,10 @@ export const rookMove = (
     for (let i = 1; i < 8; i++) {
       const multiplier = desiredPosition.x < initialPosition.x ? -1 : 1;
 
-      const passedPosition: Position = {
-        x: initialPosition.x + i * multiplier,
-        y: initialPosition.y,
-      };
+      const passedPosition = new Position(
+        initialPosition.x + i * multiplier,
+        initialPosition.y
+      );
       if (samePosition(passedPosition, desiredPosition)) {
         if (isTileEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
           return true;
@@ -65,10 +61,7 @@ export const getPossibleRookMoves = (
   const possibleMoves: Position[] = [];
 
   for (let i = 1; i < 8; i++) {
-    const destination: Position = {
-      x: rook.position.x,
-      y: rook.position.y + i,
-    };
+    const destination = new Position(rook.position.x, rook.position.y + i);
 
     if (!isTileOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -81,10 +74,7 @@ export const getPossibleRookMoves = (
   }
 
   for (let i = 1; i < 8; i++) {
-    const destination: Position = {
-      x: rook.position.x,
-      y: rook.position.y - i,
-    };
+    const destination = new Position(rook.position.x, rook.position.y - i);
 
     if (!isTileOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -97,10 +87,7 @@ export const getPossibleRookMoves = (
   }
 
   for (let i = 1; i < 8; i++) {
-    const destination: Position = {
-      x: rook.position.x - i,
-      y: rook.position.y,
-    };
+    const destination = new Position(rook.position.x - i, rook.position.y);
 
     if (!isTileOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -113,10 +100,7 @@ export const getPossibleRookMoves = (
   }
 
   for (let i = 1; i < 8; i++) {
-    const destination: Position = {
-      x: rook.position.x + i,
-      y: rook.position.y,
-    };
+    const destination = new Position(rook.position.x + i, rook.position.y);
 
     if (!isTileOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
