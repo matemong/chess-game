@@ -7,11 +7,17 @@ export class Piece {
   type: PieceType;
   team: TeamType;
   possibleMoves?: Position[];
-  constructor(position: Position, type: PieceType, team: TeamType) {
+  constructor(
+    position: Position,
+    type: PieceType,
+    team: TeamType,
+    possibleMoves: Position[] = []
+  ) {
     this.image = `src/assets/img/${type}_${team}.png`;
     this.position = position;
     this.type = type;
     this.team = team;
+    this.possibleMoves = possibleMoves;
   }
 
   get isPawn(): boolean {
@@ -44,5 +50,14 @@ export class Piece {
 
   samePosition(otherPosition: Position): boolean {
     return this.position.samePosition(otherPosition);
+  }
+
+  clone(): Piece {
+    return new Piece(
+      this.position.clone(),
+      this.type,
+      this.team,
+      this.possibleMoves?.map((m) => m.clone())
+    );
   }
 }

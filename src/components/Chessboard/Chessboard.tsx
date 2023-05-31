@@ -76,9 +76,9 @@ export default function Chessboard({ playMove, pieces }: Props) {
       const currentPiece = pieces.find((p) => p.samePosition(grabPosition));
 
       if (currentPiece) {
-        const succes = playMove(currentPiece, new Position(x, y));
+        const success = playMove(currentPiece.clone(), new Position(x, y));
 
-        if (!succes) {
+        if (!success) {
           activePiece.style.position = "relative";
           activePiece.style.removeProperty("top");
           activePiece.style.removeProperty("left");
