@@ -1,3 +1,5 @@
+import { Piece, Position } from "./models";
+
 export enum PieceType {
     PAWN = 'pawn',
     BISHOP = 'bishop',
@@ -11,3 +13,14 @@ export enum TeamType {
     BLACK = 'b',
     WHITE = 'w',
 }
+
+export type Move = {
+    piece: PieceType;
+    from: Position;
+    to: Position;
+    time: Date;
+    playedPiece: Piece;
+    isCapture: boolean;
+    isCheckMate: boolean;
+    isCheck: boolean;
+  }

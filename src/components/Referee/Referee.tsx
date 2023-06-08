@@ -3,11 +3,16 @@ import { initialBoard } from "../../Constants";
 import { Piece, Position } from "../../models";
 import { Board } from "../../models/Board";
 import { Pawn } from "../../models/Pawn";
-import { PieceType, TeamType } from "../../Types";
+import { Move, PieceType, TeamType } from "../../Types";
 import Chessboard from "../Chessboard/Chessboard";
+import GameLog from "../GameLog/GameLog";
+
+
 
 export default function Referee() {
   const [board, setBoard] = useState<Board>(initialBoard.clone());
+  const [gameLog, setGameLog] = useState<Move[]>([]);
+
   const [promotionPawn, setPromotionPawn] = useState<Piece>();
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -63,6 +68,17 @@ export default function Referee() {
         return clonedPlayedPiece;
       });
     }
+
+    setGameLog(prevLog => [...prevLog, {
+      piece: playedPiece.type,
+      from: playedPiece.position,
+      to: destination,
+      time: new Date(),
+      playedPiece: playedPiece,
+      isCapture: false, //TODO
+      isCheckMate: false, //TODO
+      isCheck: false, //TODO
+    }]);
 
     return playedMoveIsValid;
   }
@@ -135,7 +151,7 @@ export default function Referee() {
   return (
     <>
       <p style={{ color: "white", fontSize: "24px", textAlign: "center" }}>
-        Total turns: {board.totalTurns}
+        Total turns: {board.totalTurns}, {board.totalTurns % 2 ? "White" : "Black"}'s turn
       </p>
       <div className="modal hidden" ref={modalRef}>
         <div className="modal-body">
@@ -169,6 +185,7 @@ export default function Referee() {
         </div>
       </div>
       <Chessboard playMove={playMove} pieces={board.pieces} />
+      <GameLog entries={gameLog} />
     </>
   );
 }
