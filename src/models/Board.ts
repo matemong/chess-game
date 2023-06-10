@@ -26,7 +26,7 @@ export class Board {
     return this.totalTurns % 2 === 0 ? TeamType.BLACK : TeamType.WHITE;
   }
 
-  calculateAllMoves() {
+  calculateAllMoves(): boolean {
     for (const piece of this.pieces) {
       piece.possibleMoves = this.getValidMoves(piece, this.pieces);
     }
@@ -48,17 +48,16 @@ export class Board {
       piece.possibleMoves = [];
     }
 
-    if (
-      this.pieces
-        .filter((p) => p.team === this.currentTeam)
-        .some(
-          (p) => p.possibleMoves !== undefined && p.possibleMoves.length > 0
-        )
-    )
-      return;
+    const hasPossibleMoves = this.pieces
+      .filter((p) => p.team === this.currentTeam)
+      .some((p) => p.possibleMoves !== undefined && p.possibleMoves.length > 0);
 
-    this.winningTeam =
-      this.currentTeam === TeamType.WHITE ? TeamType.BLACK : TeamType.WHITE;
+    if (!hasPossibleMoves) {
+      this.winningTeam =
+        this.currentTeam === TeamType.WHITE ? TeamType.BLACK : TeamType.WHITE;
+    }
+
+    return hasPossibleMoves;
   }
 
   checkCurrentTeamMoves() {
@@ -76,12 +75,14 @@ export class Board {
 
         const clonedPiece = simulatedBoard.pieces.find((p) =>
           p.samePiecePosition(piece)
-        )!;
+        );
+        if (clonedPiece === undefined) continue;
         clonedPiece.position = move.clone();
 
         const clonedKing = simulatedBoard.pieces.find(
           (p) => p.isKing && p.team === simulatedBoard.currentTeam
-        )!;
+        );
+        if (clonedKing === undefined) continue;
 
         for (const enemy of simulatedBoard.pieces.filter(
           (p) => p.team !== simulatedBoard.currentTeam
@@ -143,11 +144,21 @@ export class Board {
     validMove: boolean,
     playedPiece: Piece,
     destination: Position
-  ): boolean {
+  ): {isValid: boolean, isCheck: boolean, isCheckMate: boolean} {
     const pawnDirection = playedPiece.team === TeamType.WHITE ? 1 : -1;
     const destinationPiece = this.pieces.find((p) =>
       p.samePosition(destination)
     );
+
+    const hasPossibleMoves = this.calculateAllMoves();
+
+  const isCheck = this.isCheck(this.currentTeam);
+  const isCheckMate = isCheck && !hasPossibleMoves;
+
+  if (isCheckMate) {
+    this.winningTeam =
+      this.currentTeam === TeamType.WHITE ? TeamType.BLACK : TeamType.WHITE;
+  }
 
     if (
       playedPiece.isKing &&
@@ -168,7 +179,7 @@ export class Board {
       });
 
       this.calculateAllMoves();
-      return true;
+      return {isValid: true, isCheck: isCheck, isCheckMate: isCheckMate};
     }
 
     if (enPassantMove) {
@@ -217,7 +228,83 @@ export class Board {
 
       this.calculateAllMoves();
     } else {
+      return {isValid: false, isCheck: isCheck, isCheckMate: isCheckMate};
+    }
+
+    return {isValid: true, isCheck: isCheck, isCheckMate: isCheckMate};
+  }
+
+  isSquareUnderAttack(position: Position, team: TeamType): boolean {
+    for (const piece of this.pieces) {
+      if (piece.team !== team) {
+        continue;
+      }
+      const moves = this.getValidMoves(piece, this.pieces);
+      if (moves.some((move) => move.samePosition(position))) {
+        return true;
+      }
+    }
+    return false;
+  }
+  isCapture(playedPiece: Piece, destination: Position): boolean {
+    const destinationPiece = this.pieces.find((p) =>
+      p.position.samePosition(destination)
+    );
+    return (
+      destinationPiece !== undefined &&
+      destinationPiece.team !== playedPiece.team
+    );
+  }
+  isCheck(team: TeamType): boolean {
+    const king = this.pieces.find((p) => p.isKing && p.team === team);
+    if (king === undefined) {
+      throw new Error("King not found");
+    }
+
+    const opponentTeam =
+      team === TeamType.WHITE ? TeamType.BLACK : TeamType.WHITE;
+    const opponents = this.pieces.filter((p) => p.team === opponentTeam);
+    for (const opponent of opponents) {
+      const validMoves = this.getValidMoves(opponent, this.pieces);
+      if (validMoves.some((move) => move.samePosition(king.position))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+  isCheckMate(team: TeamType): boolean {
+    const king = this.pieces.find((p) => p.isKing && p.team === team);
+    if (king === undefined) {
+      throw new Error("King not found");
+    }
+
+    if (!this.isCheck(team)) {
       return false;
+    }
+
+    const ownPieces = this.pieces.filter((p) => p.team === team);
+    for (const piece of ownPieces) {
+      const validMoves = this.getValidMoves(piece, this.pieces);
+      for (const move of validMoves) {
+        // Simulate the move
+        const simulatedBoard = this.clone();
+        const simulatedPiece = simulatedBoard.pieces.find((p) =>
+          p.samePiecePosition(piece)
+        );
+        if (simulatedPiece === undefined) {
+          continue;
+        }
+
+        simulatedPiece.position = move.clone();
+        simulatedBoard.pieces = simulatedBoard.pieces.filter(
+          (p) => !p.samePosition(move) || p.samePiecePosition(simulatedPiece)
+        );
+
+        if (!simulatedBoard.isCheck(team)) {
+          return false;
+        }
+      }
     }
 
     return true;

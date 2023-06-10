@@ -20,46 +20,56 @@ export default function Referee() {
 
   function playMove(playedPiece: Piece, destination: Position): boolean {
     if (playedPiece.possibleMoves === undefined) return false;
-
+  
     if (playedPiece.team === TeamType.WHITE && board.totalTurns % 2 !== 1)
       return false;
     if (playedPiece.team === TeamType.BLACK && board.totalTurns % 2 !== 0)
       return false;
-
-    let playedMoveIsValid = false;
-
+  
+    let isCapture = false;
+    let isCheck = false;
+    let isCheckmate = false;
+  
     const validMove = playedPiece.possibleMoves?.some((m) =>
       m.samePosition(destination)
     );
-
+  
     if (!validMove) return false;
-
+  
     const enPassantMove = isEnPassantMove(
       playedPiece.position,
       destination,
       playedPiece.type,
       playedPiece.team
     );
-
-    setBoard(() => {
-      const clonedBoard = board.clone();
+  
+    setBoard((currentBoard) => {
+      const clonedBoard = currentBoard.clone();
       clonedBoard.totalTurns += 1;
-      playedMoveIsValid = clonedBoard.playMove(
+  
+      isCapture = clonedBoard.isCapture(playedPiece, destination);
+  
+      const moveResult = clonedBoard.playMove(
         enPassantMove,
         validMove,
         playedPiece,
         destination
       );
-
+  
+      if (moveResult.isValid) {
+        isCheck = moveResult.isCheck;
+        isCheckmate = moveResult.isCheckMate;
+      }
+  
       if (clonedBoard.winningTeam !== undefined) {
         checkmateModalRef.current?.classList.remove("hidden");
       }
-
+  
       return clonedBoard;
     });
-
+  
     const promotionRow = playedPiece.team === TeamType.WHITE ? 7 : 0;
-
+  
     if (destination.y === promotionRow && playedPiece.isPawn) {
       modalRef.current?.classList.remove("hidden");
       setPromotionPawn(() => {
@@ -68,19 +78,22 @@ export default function Referee() {
         return clonedPlayedPiece;
       });
     }
-
-    setGameLog(prevLog => [...prevLog, {
-      piece: playedPiece.type,
-      from: playedPiece.position,
-      to: destination,
-      time: new Date(),
-      playedPiece: playedPiece,
-      isCapture: false, //TODO
-      isCheckMate: false, //TODO
-      isCheck: false, //TODO
-    }]);
-
-    return playedMoveIsValid;
+  
+    setGameLog((prevLog) => [
+      ...prevLog,
+      {
+        piece: playedPiece.type,
+        from: playedPiece.position,
+        to: destination,
+        time: new Date(),
+        playedPiece: playedPiece,
+        isCapture: isCapture,
+        isCheck: isCheck,
+        isCheckMate: isCheckmate
+      },
+    ]);
+  
+    return moveResult.isValid;
   }
 
   function isEnPassantMove(
